@@ -43,7 +43,38 @@ defineSupportCode(({Given, When, Then}) => {
     var passwordInput = cajaLogIn.element('input[name="password"]');
     passwordInput.click();
     passwordInput.keys(password)
-});
+   });
+
+   When(/^I fill with (.*) and (.*) and (.*) and (.*)$/ , (name, last_name, email, click, password) => {
+     var cajaSignUp = browser.element('.cajaSignUp');
+
+     var nombreInput = cajaSignUp.element('input[name="nombre"]');
+     nombreInput.click();
+     nombreInput.keys(name);
+
+     var apellidoInput = cajaSignUp.element('input[name="apellido"]');
+
+     apellidoInput.click();
+     apellidoInput.keys(last_name);
+
+     var mailInput = cajaSignUp.element('input[name="correo"]');
+     mailInput.click();
+     mailInput.keys(email);
+
+     var passwordInput = cajaSignUp.element('input[name="password"]');
+     passwordInput.click();
+     passwordInput.keys(password);
+
+     var selector = cajaSignUp.element('select[name="idPrograma"]');
+     selector.selectByAttribute('value','49');
+
+     var aceptaInput = cajaSignUp.element('input[name="acepta"]');
+     if(click='true'){
+     aceptaInput.click();
+     }
+     cajaSignUp.element('.logInButton').click();
+   });
+
 
 Then('I expect to see {string}', error => {
     browser.waitForVisible('.aviso.alert.alert-danger', 20000);
@@ -65,4 +96,15 @@ Then('I expect to successful {boolean}', label => {
     expect(x).to.include(label);
 });
 
+Then('I expect to see {string}', messages => {
+if(messages='Registro exi'){
+    if(browser.isVisible('button=Ok', 20000)) {
+      browser.click('button=Ok');
+    }}
+ else{
+ browser.waitForVisible('.aviso.alert.alert-danger', 20000);
+    var alertText = browser.element('.aviso.alert.alert-danger').getText();
+    expect(alertText).to.include(messages);
+ }
+});
 });
